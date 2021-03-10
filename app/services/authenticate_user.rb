@@ -1,8 +1,8 @@
 class AuthenticateUser < ApplicationService
 
-  def initialize(username, password)
-    @username = username
-    @password = password
+  def initialize(params)
+    @username = params[:username]
+    @password = params[:password]
   end
 
   def call

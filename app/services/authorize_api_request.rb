@@ -22,7 +22,9 @@ class AuthorizeApiRequest < ApplicationService
   end
 
   def http_auth_header
-    return headers['Authorization'].split(' ').last  if headers['Authorization'].present?
+    header = headers['Authorization']
+    header = header.split(' ').last if header
+    return header
     nil
   end
 end
