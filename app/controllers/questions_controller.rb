@@ -1,9 +1,10 @@
 class QuestionsController < ApplicationController
+  # skip_before_action :authenticate_request, only: %i[ show index  ]
   before_action :set_question, only: %i[ show update destroy ]
 
  
   def index
-    @questions = Question.includes(:user, :answers)
+    @questions = Question.includes(:user, :answers, taggings: :tag)
   end
 
  
@@ -13,7 +14,6 @@ class QuestionsController < ApplicationController
   
   def create
     @question = current_user.questions.build(question_params)
-
     if @question.save
       render :show, status: :created, location: @question
     else
@@ -41,6 +41,6 @@ class QuestionsController < ApplicationController
     end
 
     def question_params
-      params.require(:question).permit(:title, :description, :status)
+      params.require(:question).permit(:title, :description, tag_list: [])
     end
 end

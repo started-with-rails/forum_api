@@ -1,9 +1,9 @@
 class AnswersController < ApplicationController
   before_action :set_question
-  before_action :set_answer, only: %i[ show update destroy ]
+  before_action :set_answer, only: %i[ show update destroy upvote downvote]
 
   def index
-    @answers = @question.answers
+    @answers = @question.answers.includes(:user)
   end
 
   def show
@@ -29,6 +29,16 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
+  end
+
+  def upvote
+    @answer.upvote_by(current_user)
+    render json: { weighted_score: @answer.cached_weighted_total }
+  end
+
+  def downvote
+    @answer.downvote_by(current_user)
+    render json: { weighted_score: @answer.cached_weighted_total }
   end
 
   private
