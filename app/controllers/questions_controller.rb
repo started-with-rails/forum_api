@@ -1,10 +1,11 @@
 class QuestionsController < ApplicationController
-  # skip_before_action :authenticate_request, only: %i[ show index  ]
+  skip_before_action :authenticate_request, only: %i[ show index  ]
   before_action :set_question, only: %i[ show update destroy ]
 
  
   def index
-    @questions = Question.includes(:user, :answers, taggings: :tag)
+    type = Question::QUESTIONS_TYPES.include?(params[:type]) ? params[:type] : Question::QUESTIONS_TYPES.first
+    @questions = Question.includes(:user, :answers, taggings: :tag).public_send(:"#{type}")
   end
 
  
