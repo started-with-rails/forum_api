@@ -10,7 +10,7 @@ class Question < ApplicationRecord
   scope :recent, -> { order(created_at: :desc)}
   scope :popular, -> { order(answers_count: :desc).recent }
   scope :unanswered, -> { where(answers_count: [nil,0]).recent }
-  scope :answered, -> { popular.joins(:answers) }
+  scope :answered, -> { where.not(answers_count: [nil,0]).popular }
 
 
   # class << self
