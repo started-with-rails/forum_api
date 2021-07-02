@@ -5,7 +5,9 @@ class QuestionsController < ApplicationController
  
   def index
     type = Question::QUESTIONS_TYPES.include?(params[:type]) ? params[:type] : Question::QUESTIONS_TYPES.first
-    @questions = Question.includes(:user, :answers, taggings: :tag).public_send(:"#{type}")
+    questions  = Question.includes(:user, :answers, taggings: :tag)
+    questions  = questions.tagged_with("#{params[:tag]}") if params[:tag]
+    @questions = questions.public_send(:"#{type}")
   end
 
  
